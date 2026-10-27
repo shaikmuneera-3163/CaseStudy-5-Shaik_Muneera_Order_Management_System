@@ -1,18 +1,27 @@
 
 version: 0.2
 
+env:
+  variables:
+    HOME: "/tmp"
+    GOCACHE: "/tmp/go-build-cache"
+    GOMODCACHE: "/tmp/go-mod-cache"
+    GOOS: "linux"
+    GOARCH: "amd64"
+    CGO_ENABLED: "0"
+
 phases:
   install:
-    runtime-versions:
-      golang: 1.23
     commands:
+      - echo "Checking Go version..."
       - go version
+      - mkdir -p "$HOME" "$GOCACHE" "$GOMODCACHE"
 
   pre_build:
     commands:
-      - echo "Downloading dependencies..."
+      - echo "Downloading Go dependencies..."
       - go mod download
-      - echo "Running tests..."
+      - echo "Running Go tests..."
       - go test ./...
 
   build:
